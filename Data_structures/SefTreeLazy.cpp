@@ -1,9 +1,8 @@
 //1-based indexing
- 
+//there is a bug in this segtree, do not use it
 struct segment_tree{
-    LL n;
-    vector<LL> val;
-    vector<LL> lazy;
+    const int INF = 1<<30;
+    LL n; vector<LL> val, lazy;
  
     segment_tree(vector<LL> &v){
         n = v.size();
@@ -28,11 +27,9 @@ struct segment_tree{
             val[id] = v[st];
             return;
         }
- 
         LL mid = (st + end)/2;
         build(2*id, st, mid, v);
         build(2*id+1, mid+1, end, v);
- 
         val[id] = min(val[2*id], val[2*id + 1]);
     }
  
@@ -40,11 +37,9 @@ struct segment_tree{
         push(id, st, end);
         if(l<= st  && end<=r) return val[id];
         if(end < l || r < st) return INF;
- 
         LL mid = (st + end)/2;
         LL leftmin = query(2*id, st, mid, l, r); 
         LL rightmin = query(2*id+1, mid+1, end, l, r);
- 
         return min(leftmin, rightmin);
     }
   
@@ -54,14 +49,11 @@ struct segment_tree{
             push(id, st, end);
             return;
         }
- 
         if(end < l || r < st) return;
- 
         push(id, st, end);
         LL mid = (st+ end)/2;
         update(2*id, st, mid, l, r, x);
         update(2*id + 1, mid + 1, end, l, r, x);
- 
         val[id] = min(val[2*id], val[2*id+ 1]);
     }
  

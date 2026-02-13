@@ -4,15 +4,9 @@ const int mod = 998244353;
 LL binpow(LL a, LL b) {
     if (b == 0) return 1;
     LL res = binpow(a, b / 2);
-    if (b % 2) return res * res * a;
-    else return res * res;
+    if (b % 2) return res * res % mod * a % mod;
+    else return res * res % mod;
 }
- 
-//computes modular inverse of a modulo m (a and m must be coprime)
-LL inv(LL a, LL m) {
-  return a <= 1 ? a : m - (long long)(m/a) * inv(m % a, m) % m;
-}
-
 
 // precalc and func for nCr
 const int N = 2e5+10;
@@ -24,7 +18,7 @@ void calc(){
         fact[i] = fact[i-1] * i % mod;
     }
  
-    invfact[N-1] = inv(fact[N-1], mod);
+    invfact[N-1] = binpow(fact[N-1], mod);
     for(int i = N-2; i>=0; i--){
         invfact[i] = invfact[i+1] * (i+1) % mod;
     }

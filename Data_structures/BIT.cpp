@@ -1,12 +1,11 @@
+//0-based indexing
 struct BIT{
-    LL n; 
-    vector<LL> t;
+    LL n; vector<LL> t;
  
     BIT(LL n){
         this->n = n;
         t.assign(n+1, 0);
     }
- 
     //delta means kototuk barse
     void update(LL i, LL delta){
         while(i < n){
@@ -14,8 +13,6 @@ struct BIT{
             i = ((i + 1) | i);
         }
     }
- 
- 
     //0 theke r-th index porzonto sobar zogfol
     LL sum(LL r){
         if(r < 0) return 0;
@@ -26,20 +23,14 @@ struct BIT{
         }
         return zogfol;
     }
- 
-    LL query(LL l, LL r){
-        //cout<<l<<" "<<r<<"\n";
-        return sum(r) -  sum(l-1);
-    }
+
+    LL query(LL l, LL r){ return sum(r) -  sum(l-1); }
  
 };
  
 struct BIT2D{
-    int n, m;
-    vector<vector<int>> t;
-    //row  - n
-    //coloumn - m
- 
+    int n, m; vector<vector<int>> t;
+    //row  - n, coloumn - m
     BIT2D(int n, int m){
         this->n = n;
         this->m = m;
@@ -72,7 +63,5 @@ struct BIT2D{
         return sum;
     }
  
-    int query(int x1, int y1, int x2, int y2){
-        return sum(x2, y2) - sum(x2, y1-1) - sum(x1-1, y2) + sum(x1-1, y1-1);
-    }
+    int query(int x1, int y1, int x2, int y2){ return sum(x2, y2) - sum(x2, y1-1) - sum(x1-1, y2) + sum(x1-1, y1-1); }
 };

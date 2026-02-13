@@ -1,8 +1,5 @@
-#include <bits/stdc++.h>
-using namespace std;
 // DSU Algo
 // Source : CP Algorithms
-
 struct DSU{
     int n;
     vector<int> parent, sizex;
