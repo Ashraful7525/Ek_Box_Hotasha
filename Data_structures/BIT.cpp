@@ -1,44 +1,52 @@
 //0-based indexing
+template<typename T>
 struct BIT{
-    LL n; vector<LL> t;
+    int n; vector<T> t;
  
-    BIT(LL n){
-        this->n = n;
-        t.assign(n+1, 0);
-    }
+    BIT(int n): n(n), t(n, T(0)) {}
     //delta means kototuk barse
-    void update(LL i, LL delta){
+    void update(LL i, T delta) {
         while(i < n){
-            t[i]+= 1LL*delta;
-            i = ((i + 1) | i);
+            t[i]+= delta;
+            i|= (i + 1);
         }
     }
     //0 theke r-th index porzonto sobar zogfol
-    LL sum(LL r){
+    T sum(int r) const {
         if(r < 0) return 0;
-        LL zogfol = 0;
+        T zogfol = 0;
         while(r >= 0){
-            zogfol+= 1LL*t[r];
-            r = (r & (r + 1))- 1;
+            zogfol+= t[r];
+            r&= (r + 1); r--;
         }
         return zogfol;
     }
+    //finds the first occerence where the pref sum is >= k
+    int find_sum_K(T k) const {
+        int id = -1, pw = 1;
+        while((pw << 1) < n) pw<<= 1;
+        for(; pw; pw>>= 1){
+            int next = id + pw;
+            if(next < n && t[next] < k){
+                k-= t[next];
+                id+= pw;
+            }
+        }
+        return ++id;
+    }
 
-    LL query(LL l, LL r){ return sum(r) -  sum(l-1); }
+    T query(int l, int r) const { return sum(r) -  sum(l-1); }
  
 };
- 
+
+template<typename T>
 struct BIT2D{
-    int n, m; vector<vector<int>> t;
+    int n, m; vector<vector<T>> t;
     //row  - n, coloumn - m
-    BIT2D(int n, int m){
-        this->n = n;
-        this->m = m;
-        t.assign(n, vector<int>(m, 0));
-    }
+    BIT2D(int n, int m): n(n), m(m), t(n, vector<T>(m, T(0))) {}
  
-    void update(int x, int y, int delta){
-        if(x < 0 || y < 0) return
+    void update(int x, int y, T delta){
+        if(x < 0 || y < 0) return;
         while(x < n){
             int Y = y;
             while(Y < m){
@@ -49,9 +57,9 @@ struct BIT2D{
         }
     }
  
-    int sum(int x, int y){
+    T sum(int x, int y) const {
         if(x < 0 || y < 0) return 0;
-        int sum = 0;
+        T sum = 0;
         while(x >= 0){
             int Y = y;
             while(Y >= 0){
@@ -63,5 +71,5 @@ struct BIT2D{
         return sum;
     }
  
-    int query(int x1, int y1, int x2, int y2){ return sum(x2, y2) - sum(x2, y1-1) - sum(x1-1, y2) + sum(x1-1, y1-1); }
+    T query(int x1, int y1, int x2, int y2) const { return sum(x2, y2) - sum(x2, y1-1) - sum(x1-1, y2) + sum(x1-1, y1-1); }
 };

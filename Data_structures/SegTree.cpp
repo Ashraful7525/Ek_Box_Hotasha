@@ -1,12 +1,11 @@
 //1-based indexing
- 
 struct segment_tree{
     const int INF = 1<<30;
     int n; vector<int> val;
 
     segment_tree(vector<int> &v){
-        n = v.size();
-        val.assign(4*n, INF);
+        n = v.size() - 1;
+        val.assign(4*n+4, INF);
         build(1, 1, n, v);
     }
  
@@ -29,6 +28,17 @@ struct segment_tree{
         int rightmin = query(2*id+1, mid+1, end, l, r);
         return min(leftmin, rightmin);
     }
+    // finds the leftmost index i such that l <= i <= r and a[i] < x;
+    // if there doesn't exist such index, will return {INF, -1}
+    pair<int, int> queryLeft(int id, int st, int end, int l , int r, int x){
+        if(end < l || r < st) return {INF, -1};
+        if(val[id] >= x) return {INF, -1};
+        if(st == end) return {val[id], st}; 
+        int mid = (st + end)/2;
+        pair<int, int> left = queryLeft(2 * id, st, mid, l, r, x);
+        if(left.second != -1) return left;
+        return queryLeft(2 * id + 1, mid + 1, end, l, r, x);
+    }
  
     void update(int id, int st, int end, int i, int x){
         if(st == end){
@@ -42,6 +52,10 @@ struct segment_tree{
     }
 
     int query(int l, int r){ return query(1, 1, n, l, r); }
+    int queryLeft(int l, int r, int x){
+        auto [v, id] = queryLeft(1, 1, n, l, r, x);
+        return id;
+    }
     void update(int i, int x){ update(1, 1, n, i, x); }
- 
+
 };
