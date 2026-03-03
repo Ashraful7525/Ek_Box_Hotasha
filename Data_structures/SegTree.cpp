@@ -20,7 +20,7 @@ struct segment_tree{
         val[id] = min(val[2*id], val[2*id + 1]);
     }
  
-    int query(int id, int st, int end, int l, int r){
+    int query(int id, int st, int end, int l, int r) const {
         if(l<= st  && end<=r) return val[id];
         if(end < l || r < st) return INF;
         int mid = (st + end)/2;
@@ -40,7 +40,7 @@ struct segment_tree{
         return queryLeft(2 * id + 1, mid + 1, end, l, r, x);
     }
  
-    void update(int id, int st, int end, int i, int x){
+    void update(int id, int st, int end, int i, int x) const {
         if(st == end){
             val[id] = x;
             return;
@@ -51,8 +51,8 @@ struct segment_tree{
         val[id] = min(val[2*id], val[2*id+ 1]);
     }
 
-    int query(int l, int r){ return query(1, 1, n, l, r); }
-    int queryLeft(int l, int r, int x){
+    int query(int l, int r) const { return query(1, 1, n, l, r); }
+    int queryLeft(int l, int r, int x) const {
         auto [v, id] = queryLeft(1, 1, n, l, r, x);
         return id;
     }
